@@ -75,10 +75,9 @@ const AddProductPage = () => {
         },
         body: JSON.stringify({
           ...formData,
-          blob_id: blobId
+          blob_id: blobId,
         }),
       });
-
 
       if (!response.ok) {
         throw new Error("Failed to create product");
