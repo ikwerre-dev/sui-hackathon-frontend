@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
                 ['delivered', customer_id, false, scanRecord[0].id]
             );
             return NextResponse.json({
-                message: 'Logistics Completed',
+                message: 'Logistics Completed - v',
                 customer: {
                     name: customer.name,
                     email: customer.email,
