@@ -110,6 +110,11 @@ export async function POST(request: NextRequest) {
                 ['delivered', customer_id, false, scanRecord[0].id]
             );
             if (product.status === 'delivered') {
+                await connection.execute(
+                    'DELETE FROM logs WHERE product_id = ?',
+                    [product_id]
+                );
+
                 return NextResponse.json({
                     message: 'Already completed',
                     customer: {
@@ -176,13 +181,18 @@ export async function POST(request: NextRequest) {
             }));
 
             // Save logs to Walrus
-            const blobId = saveLogsAsBlob(processedLogs);
+            const blobId = await saveLogsAsBlob(processedLogs);
 
+            // Delete logs after successful blob storage
+            await connection.execute(
+                'DELETE FROM logs WHERE product_id = ?',
+                [product_id]
+            );
 
             // Update scannedrecord
             await connection.execute(
                 'UPDATE scannedrecord SET status = ?, customer_id = ?, live = ? WHERE id = ?',
-                ['delivered', customer_id, false,  scanRecord[0].id]
+                ['delivered', customer_id, false, scanRecord[0].id]
             );
             return NextResponse.json({
                 message: 'Logistics Completed',
