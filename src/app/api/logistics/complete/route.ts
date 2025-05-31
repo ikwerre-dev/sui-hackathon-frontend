@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import pool from '@/lib/mysql';
 import type { RowDataPacket } from 'mysql2';
-import { saveLogsAsBlob, saveProductBlob } from '@/app/user/seller/products/utils/walrustools';
 
 interface LogisticsUser extends RowDataPacket {
     id: number;
@@ -23,23 +22,6 @@ interface Product extends RowDataPacket {
     created_at: Date;
     user_id: number;
     delivery_fee: number;
-}
-
-interface Log extends RowDataPacket {
-    id: number;
-    product_id: number;
-    longitude: number;
-    latitude: number;
-    temperature: number;
-    humidity: number;
-    pressure: number;
-    accel_x: number;
-    accel_y: number;
-    accel_z: number;
-    gyro_x: number;
-    gyro_y: number;
-    gyro_z: number;
-    created_at: Date;
 }
 
 export async function POST(request: NextRequest) {
@@ -90,9 +72,9 @@ export async function POST(request: NextRequest) {
             }
 
             const product = products[0];
-
-
-
+            
+          
+            
             const [scanRecord] = await connection.execute<RowDataPacket[]>(
                 'SELECT id FROM scannedrecord WHERE product_id = ? AND live = true',
                 [product_id]
@@ -110,11 +92,6 @@ export async function POST(request: NextRequest) {
                 ['delivered', customer_id, false, scanRecord[0].id]
             );
             if (product.status === 'delivered') {
-                await connection.execute(
-                    'DELETE FROM logs WHERE product_id = ?',
-                    [product_id]
-                );
-
                 return NextResponse.json({
                     message: 'Already completed',
                     customer: {
@@ -150,60 +127,15 @@ export async function POST(request: NextRequest) {
                 [product_id]
             );
 
-            // Fetch all logs for this product
-            const [logs] = await connection.execute<Log[]>(
-                'SELECT * FROM logs WHERE product_id = ? ORDER BY created_at DESC',
-                [product_id]
-            );
-
-            const processedLogs = logs.slice(0, 5).map(log => ({
-                timestamp: log.created_at.toISOString(),
-                action: "delivery_tracking",
-                details: {
-                    longitude: log.longitude,
-                    latitude: log.latitude,
-                    temperature: log.temperature,
-                    humidity: log.humidity,
-                    pressure: log.pressure,
-                    acceleration: {
-                        x: log.accel_x,
-                        y: log.accel_y,
-                        z: log.accel_z
-                    },
-                    gyroscope: {
-                        x: log.gyro_x,
-                        y: log.gyro_y,
-                        z: log.gyro_z
-                    }
-                },
-                productId: log.product_id.toString(),
-                userId: customer_id.toString()
-            }));
-
-            // Save logs to Walrus
-            const blobId = await saveLogsAsBlob(processedLogs);
-
-            // Delete logs after successful blob storage
-            await connection.execute(
-                'DELETE FROM logs WHERE product_id = ?',
-                [product_id]
-            );
-
-            // Update scannedrecord
-            await connection.execute(
-                'UPDATE scannedrecord SET status = ?, customer_id = ?, live = ? WHERE id = ?',
-                ['delivered', customer_id, false, scanRecord[0].id]
-            );
             return NextResponse.json({
-                message: 'Logistics Completed - v',
+                message: 'Logistics Completed',
                 customer: {
                     name: customer.name,
                     email: customer.email,
                     balance: customer.balance,
                     address: customer.address
                 },
-                product: updatedProducts[0],
-                blob_id: blobId
+                product: updatedProducts[0]
             });
         } finally {
             connection.release();
