@@ -46,12 +46,12 @@ export async function getFundedKeypair() {
         owner: address,
     });
 
-    if (BigInt(balance.totalBalance) < MIST_PER_SUI) {
-        await requestSuiFromFaucetV2({
-            host: getFaucetHost('testnet'),
-            recipient: address,
-        });
-    }
+    // if (BigInt(balance.totalBalance) < MIST_PER_SUI) {
+    //     await requestSuiFromFaucetV2({
+    //         host: getFaucetHost('testnet'),
+    //         recipient: address,
+    //     });
+    // }
 
     const walBalance = await suiClient.getBalance({
         owner: address,
