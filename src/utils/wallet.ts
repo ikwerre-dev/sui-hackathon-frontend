@@ -1,8 +1,7 @@
-// src/utils/wallet.ts
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 import { fromB64, toB64 } from '@mysten/sui.js/utils';
 import { SuiClient } from '@mysten/sui.js/client';
-import CryptoJS from 'crypto-js'; // We'll need to install this
+import CryptoJS from 'crypto-js';  
 
 // Initialize Sui client for devnet
 export const suiClient = new SuiClient({ 
