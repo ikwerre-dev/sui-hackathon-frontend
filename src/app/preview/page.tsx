@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-
-import { FaBox, FaUser, FaClipboardList } from 'react-icons/fa';
+import { useEffect, useState, useCallback } from 'react';
+import { FaBox, FaUser, FaClipboardList, FaMapMarkerAlt } from 'react-icons/fa';
 import { BiTrendingUp, BiTrendingDown } from 'react-icons/bi';
 import { TbTemperature, TbDroplet, TbGauge, TbAccessPoint } from 'react-icons/tb';
 
@@ -54,12 +53,22 @@ interface ScanStatus {
     logs: Log[];
 }
 
+interface Location {
+    latitude: number;
+    longitude: number;
+    accuracy: number;
+}
+
 export default function Preview() {
     const [status, setStatus] = useState<ScanStatus | null>(null);
     const [loading, setLoading] = useState(true);
     const [isData, setisData] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
+    const [location, setLocation] = useState<Location>({ 
+        latitude: 4.891119299589522,
+        longitude: 6.919050071332949,
+        accuracy: 0
+    });
     const fetchStatus = async () => {
         try {
             const response = await fetch('/api/scan/current');
@@ -214,13 +223,40 @@ export default function Preview() {
                     </div>
 
                     <div className="lg:col-span-4 space-y-6">
-
+                        <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 hover:border-[#00FFD1] transition-colors duration-300">
+                            <div className="flex items-center space-x-3 mb-4">
+                                <FaMapMarkerAlt className="w-6 h-6 text-[#00FFD1]" />
+                                <h3 className="text-xl font-bold text-gray-800">Current Location</h3>
+                            </div>
+                            {location ? (
+                                <div className="space-y-3">
+                                    <div className="aspect-video rounded-lg overflow-hidden">
+                                        <iframe
+                                            title="Current Location"
+                                            width="100%"
+                                            height="100%"
+                                            frameBorder="0"
+                                            src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.longitude - 0.01},${location.latitude - 0.01},${location.longitude + 0.01},${location.latitude + 0.01}&layer=mapnik&marker=${location.latitude},${location.longitude}`}
+                                        />
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-3 text-sm">
+                                        <MetricItem label="Latitude" value={Number(location.latitude).toFixed(6)} />
+                                        <MetricItem label="Longitude" value={Number(location.longitude).toFixed(6)} />
+                                        <MetricItem label="Accuracy" value={`±${Number(location.accuracy).toFixed(0)}m`} />
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                    <p>Fetching location...</p>
+                                </div>
+                            )}
+                        </div>
 
                         <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-200 hover:border-[#00FFD1] transition-colors duration-300">
                             <h3 className="text-xl font-bold text-gray-800 mb-4">Log History</h3>
                             <div className="max-h-[calc(100vh-24rem)] overflow-y-auto pr-2 space-y-4">
                                 {status.logs && status.logs.length > 0 ? (
-                                    status.logs.map((log,index) => (
+                                    status.logs.map((log, index) => (
                                         <div key={log.id} className={`${log.id % 2 ? 'bg-gray-300' : 'bg-gray-100'} p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200`}>
                                             <div className="grid grid-cols-2 gap-3 text-sm">
                                                 <div className="flex justify-between items-center col-span-2 pb-2 mb-2 border-b border-gray-200">
