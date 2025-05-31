@@ -236,7 +236,7 @@ export default function Preview() {
                                             width="100%"
                                             height="100%"
                                             frameBorder="0"
-                                            src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.longitude - 0.01},${location.latitude - 0.01},${location.longitude + 0.01},${location.latitude + 0.01}&layer=mapnik&marker=${location.latitude},${location.longitude}`}
+                                            src={`https://www.openstreetmap.org/export/embed.html?bbox=${location.longitude - 0.001},${location.latitude - 0.001},${location.longitude + 0.001},${location.latitude + 0.001}&layer=mapnik&marker=${location.latitude},${location.longitude}`}
                                         />
                                     </div>
                                     <div className="grid grid-cols-2 gap-3 text-sm">
