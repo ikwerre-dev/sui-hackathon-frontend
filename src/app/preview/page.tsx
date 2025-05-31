@@ -64,7 +64,7 @@ export default function Preview() {
     const [loading, setLoading] = useState(true);
     const [isData, setisData] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [location, setLocation] = useState<Location>({ 
+    const [location, setLocation] = useState<Location>({
         latitude: 4.891119299589522,
         longitude: 6.919050071332949,
         accuracy: 0
@@ -104,7 +104,7 @@ export default function Preview() {
     if (!status || !isData) {
         return (
             <div className="min-h-screen bg-white flex items-center justify-center p-4">
-                <div className="text-center space-y-8 max-w-2xl mx-auto">
+                <div className="text-center space-y-8 max-w-2xl mx-auto ">
                     <h1 className="text-6xl font-bold text-gray-900">No Active Scan</h1>
                     <p className="text-2xl text-gray-600">Please scan a product to continue tracking</p>
                     <div className="mt-8 animate-bounce">
@@ -112,6 +112,10 @@ export default function Preview() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13l-3 3m0 0l-3-3m3 3V8m0 13a9 9 0 110-18 9 9 0 010 18z" />
                         </svg>
                     </div>
+                    <div className="flex items-center justify-center">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?data=https://tracui.pxxl.tech/preview%23howitworks&size=200x200" alt="QR Code"></img>
+                    </div>
+
                     <p className="text-xl text-gray-500 mt-4">Use your device to scan the QR code or NFC tag</p>
                 </div>
             </div>
