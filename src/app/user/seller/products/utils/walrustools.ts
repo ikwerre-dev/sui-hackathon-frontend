@@ -35,10 +35,11 @@ export async function saveProductBlob(data: unknown): Promise<string> {
 
             console.log(`Attempt ${attempt + 1}/${MAX_RETRIES} to save blob...`);
 
-             const { blobId } = await walrusClient.writeBlob({
+            // Write blob directly - it handles registration internally
+            const { blobId } = await walrusClient.writeBlob({
                 blob,
                 deletable: false,
-                epochs: 5, 
+                epochs: 5, // Increased for better persistence
                 signer: keypair,
             });
 
