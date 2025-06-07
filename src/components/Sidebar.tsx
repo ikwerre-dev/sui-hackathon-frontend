@@ -17,7 +17,6 @@ import { FaBars, FaUserSecret, FaX } from "react-icons/fa6";
 import Link from "next/link";
 import { IconType } from "react-icons";
 import Image from "next/image";
-import WalletConnect from "./ConnectWallet";
 import WalletBalance from './WalletBalance';
 
 interface SidebarProps {
