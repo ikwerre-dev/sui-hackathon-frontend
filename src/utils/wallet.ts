@@ -1,7 +1,7 @@
-// src/utils/wallet.ts
 import { Ed25519Keypair } from '@mysten/sui.js/keypairs/ed25519';
 import { fromB64, toB64 } from '@mysten/sui.js/utils';
 import { SuiClient } from '@mysten/sui.js/client';
+<<<<<<< HEAD
 import CryptoJS from 'crypto-js'; // We'll need to install this
 import { TransactionBlock } from '@mysten/sui.js/transactions';
 import pool from '@/lib/mysql';
@@ -9,6 +9,9 @@ import { requestSuiFromFaucetV0, getFaucetHost } from '@mysten/sui.js/faucet';
 import { clear } from 'console';
 import { encodeSuiPrivateKey, decodeSuiPrivateKey } from '@mysten/sui.js/cryptography';
 import { requestSuiFromFaucetV2 } from '@mysten/sui/faucet';
+=======
+import CryptoJS from 'crypto-js';  
+>>>>>>> 21f84ef65ac4558d5338c02544cc7ae13d086791
 
 // Initialize Sui client for testnet
 export const suiClient = new SuiClient({ 
