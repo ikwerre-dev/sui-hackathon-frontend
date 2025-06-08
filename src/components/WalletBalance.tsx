@@ -118,7 +118,7 @@ const WalletBalance = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 p-4">
+    <div className="flex flex-col gap-2 p-2">
       <div className="bg-white rounded-xl shadow-sm p-4">
         <div className="flex justify-between items-center mb-3">
           <div>
@@ -127,7 +127,7 @@ const WalletBalance = () => {
           </div>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors block lg:hidden"
           >
             Deposit
           </button>
@@ -141,6 +141,13 @@ const WalletBalance = () => {
           </p>
         </div>
       </div>
+
+      <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors hidden lg:block border-2 border-gray-500 mt-3 cursor-pointer"
+          >
+            Deposit
+          </button>
 
       <DepositModal
         isOpen={isModalOpen}
