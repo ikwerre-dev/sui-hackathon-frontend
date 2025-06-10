@@ -202,46 +202,44 @@ const AddProductPage = () => {
         throw new Error("Authentication token not found");
       }
   
-      // Create escrow and transfer funds
-    //   const escrowResponse = await fetch('/api/products/escrow', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //     body: JSON.stringify({
-    //       recipient_email: formData.recipient_email,
-    //       amount: escrowAmount.toString(), // Convert BigInt to string
-    //       product_id: formData.recipient_email,
-    //       sender_email: formData.sender_email,
-    //       logistics_email: formData.logistics_email
-    //     })
-    //   });
+      const escrowResponse = await fetch('/api/products/escrow', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          recipient_email: formData.recipient_email,
+          amount: escrowAmount.toString(), // Convert BigInt to string
+          product_id: formData.recipient_email,
+          sender_email: formData.sender_email,
+          logistics_email: formData.logistics_email
+        })
+      });
   
-    //   if (!escrowResponse.ok) {
-    //     const escrowData = await escrowResponse.json();
-    //     throw new Error(escrowData.error || 'Failed to create escrow');
-    //   }
+      if (!escrowResponse.ok) {
+        const escrowData = await escrowResponse.json();
+        throw new Error(escrowData.error || 'Failed to create escrow');
+      }
 
-    //   const escrowData = await escrowResponse.json();
+      const escrowData = await escrowResponse.json();
 
-    // // Get funded escrow keypair with WAL tokens
-    // console.log('Funded escrow keypair created for blob storage');
+    // Get funded escrow keypair with WAL tokens
+    console.log('Funded escrow keypair created for blob storage');
 
-    // // Use keypair with saveProductBlob
-    // const blobId = await saveProductBlob(
-    //   {
-    //     ...formData,
-    //     escrow_amount: escrowAmount,
-    //     created_at: new Date().toISOString()
-    //   },
-    //   escrowData.wallet.privateKey  // Pass the funded keypair directly
-    // );
+    // Use keypair with saveProductBlob
+    const blobId = await saveProductBlob(
+      {
+        ...formData,
+        escrow_amount: escrowAmount,
+        created_at: new Date().toISOString()
+      },
+      escrowData.wallet.privateKey  // Pass the funded keypair directly
+    );
 
-    // if (!blobId) {
-    //   throw new Error("Failed to save product blob");
-    // }
-      const blobId = "BLOODOFJESUS"
+    if (!blobId) {
+      throw new Error("Failed to save product blob");
+    }
     console.log('Product blob saved with ID:', blobId);
 
     // Create the product with blob reference

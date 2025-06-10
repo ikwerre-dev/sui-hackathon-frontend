@@ -52,6 +52,7 @@ export async function getIndividualKeypair(keypairSecret: string) {
         owner: address,
     });
 
+    //commented because of sui rate limit with faucets
     // if (BigInt(balance.totalBalance) < MIST_PER_SUI) {
     //     await requestSuiFromFaucetV2({
     //         host: getFaucetHost('testnet'),

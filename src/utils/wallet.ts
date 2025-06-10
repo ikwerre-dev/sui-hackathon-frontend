@@ -32,7 +32,7 @@ export const createNewWallet = async (userEmail: string): Promise<WalletInfo> =>
     
     // Add detailed logging for key creation
     const exportedKeypair = keypair.export();
-    const privateKey = `suiprivkey${exportedKeypair.privateKey}`;
+    const privateKey = `${exportedKeypair.privateKey}`;
     const publicKey = keypair.getPublicKey().toBase64();
 
     console.log('Creating new wallet:', {
