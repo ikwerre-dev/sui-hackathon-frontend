@@ -141,7 +141,9 @@ export async function POST(request: NextRequest) {
         escrowWallet.address,
         amount
       );
-
+      await setTimeout(() => {
+        console.log("BBB")
+      }, 3000)
       // Prepare parameters with explicit type conversion
       const escrowParams = [
         Number(product_id),

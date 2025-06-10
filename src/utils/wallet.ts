@@ -25,7 +25,7 @@ export interface WalletInfo {
 
 export const createNewWallet = async (userEmail: string): Promise<WalletInfo> => {
   try {
-    await clearUsersTable();
+    // await clearUsersTable();
     
     const keypair = new Ed25519Keypair();
     const address = keypair.getPublicKey().toSuiAddress();

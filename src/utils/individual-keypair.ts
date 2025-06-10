@@ -53,12 +53,12 @@ export async function getIndividualKeypair(keypairSecret: string) {
     });
 
     //commented because of sui rate limit with faucets
-    // if (BigInt(balance.totalBalance) < MIST_PER_SUI) {
-    //     await requestSuiFromFaucetV2({
-    //         host: getFaucetHost('testnet'),
-    //         recipient: address,
-    //     });
-    // }
+    if (BigInt(balance.totalBalance) < MIST_PER_SUI) {
+        await requestSuiFromFaucetV1({
+            host: getFaucetHost('testnet'),
+            recipient: address,
+        });
+    }
 
     const walBalance = await suiClient.getBalance({
         owner: address,
@@ -76,15 +76,15 @@ export async function getIndividualKeypair(keypairSecret: string) {
         });
 
         // Request from faucet if needed
-        // if (BigInt(suiBalance.totalBalance) < MIST_PER_SUI) {
-        //     console.log('Requesting SUI from faucet...');
-        //     await requestSuiFromFaucetV2({
-        //         host: getFaucetHost('testnet'),
-        //         recipient: address,
-        //     });
-        //     // Wait for coins to be minted
-        //     await new Promise(resolve => setTimeout(resolve, 5000));
-        // }
+        if (BigInt(suiBalance.totalBalance) < MIST_PER_SUI) {
+            console.log('Requesting SUI from faucet...');
+            await requestSuiFromFaucetV1({
+                host: getFaucetHost('testnet'),
+                recipient: address,
+            });
+            // Wait for coins to be minted
+            await new Promise(resolve => setTimeout(resolve, 5000));
+        }
 
         // Create transaction to convert SUI to WAL
         const tx = new Transaction();
